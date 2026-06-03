@@ -1,0 +1,14 @@
+[project]
+name = "clip-ring"
+version = "0.1.0"
+description = "Local-first clipboard history manager core."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "Maintainers"}]
+
+[project.scripts]
+clip-ring = "clip_ring.cli:main"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

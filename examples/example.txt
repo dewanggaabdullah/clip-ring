@@ -1,0 +1,1 @@
+This is a toy file used for metadata-only clipboard demos.
