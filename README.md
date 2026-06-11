@@ -14,6 +14,16 @@ python -m clip_ring.cli demo-image
 python -m clip_ring.cli clear
 ```
 
+Example terminal output:
+
+```text
+added text
+1. text: {'text': 'hello'}
+added file metadata
+added demo image cache record
+cleared
+```
+
 By default, history is stored locally under the user's application data directory. For tests or demos, set `CLIP_RING_HOME`.
 
 ## Privacy boundary

@@ -5,6 +5,7 @@ import pytest
 from clip_ring.adapters.clipboard_file import make_file_record
 from clip_ring.adapters.clipboard_text import make_text_record
 from clip_ring.core.ring_buffer import RingBuffer
+from clip_ring.core.storage import JsonStorage
 
 
 def test_ring_limit():
@@ -26,3 +27,12 @@ def test_file_metadata_only(tmpdir):
     record = make_file_record(p)
     assert record.payload["policy"] == "metadata_only"
     assert "content" not in record.payload
+
+
+def test_json_storage_roundtrip(tmpdir):
+    storage = JsonStorage(home=str(tmpdir), max_items=8)
+    rb = RingBuffer(max_items=8)
+    rb.add(make_text_record("hello"))
+    storage.save(rb)
+    loaded = storage.load()
+    assert loaded.list()[0].payload["text"] == "hello"
