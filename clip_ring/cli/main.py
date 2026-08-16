@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 import argparse
+import json
 
 from clip_ring.adapters.clipboard_file import make_file_record
 from clip_ring.adapters.clipboard_image import make_demo_image_record
 from clip_ring.adapters.clipboard_text import make_text_record
+from clip_ring.core.privacy_filter import redact_text
 from clip_ring.core.storage import JsonStorage
 
 
@@ -19,6 +21,10 @@ def main(argv: list[str] | None = None) -> None:
     sub.add_parser("demo-image")
     sub.add_parser("list")
     sub.add_parser("clear")
+
+    p_export = sub.add_parser("export")
+    p_export.add_argument("--redacted", action="store_true")
+
     args = parser.parse_args(argv)
 
     storage = JsonStorage(max_items=args.max_items)
@@ -42,6 +48,18 @@ def main(argv: list[str] | None = None) -> None:
         rb.clear()
         storage.clear()
         print("cleared")
+    elif args.command == "export":
+        records = []
+
+        for record in rb.list():
+            data = record.to_dict()
+
+            if record.kind == "text" and args.redacted:
+                data["payload"]["text"] = redact_text(data["payload"]["text"])
+
+            records.append(data)
+
+        print(json.dumps({"records": records}, indent=2))
 
 
 if __name__ == "__main__":

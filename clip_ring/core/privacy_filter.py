@@ -13,3 +13,7 @@ PATTERNS = [
 
 def looks_sensitive(text: str) -> bool:
     return any(pattern.search(text) for pattern in PATTERNS)
+
+
+def redact_text(text: str) -> str:
+    return "[REDACTED]"
